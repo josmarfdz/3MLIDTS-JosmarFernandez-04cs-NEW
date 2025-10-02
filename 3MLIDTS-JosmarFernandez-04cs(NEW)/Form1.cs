@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,8 +17,14 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
         public Form1()
         {
             InitializeComponent();
+            txtNombre.TextChanged += validarNombre;
+            txtEdad.TextChanged += validarEdad;
+            txtEstatura.TextChanged += validarEstatura;
+            txtApellidos.TextChanged += validarApellido;
+            txtTeléfono.TextChanged += validarTelefono;
         }
-        private void LimpiarCampos()
+
+        private void btnBorrar_Click(object sender, EventArgs e)
         {
             txtEdad.Clear();
             txtEstatura.Clear();
@@ -28,77 +35,79 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
             rbFem.Checked = false;
         }
 
-        private void btnConfirmar_Click(object sender, EventArgs e)
+        private void validarNombre(object sender, EventArgs e)
         {
-            string name = txtNombre.Text.Trim();
-            string apellido = txtApellidos.Text.Trim();
-            string est = txtEstatura.Text.Trim();
-            string num = txtTeléfono.Text.Trim();
-            string edad = txtEdad.Text.Trim();
-
-            string genero = rbMasc.Checked ? "Hombre" :
-                            rbFem.Checked ? "Mujer" : "No especificado";
-
-            // Validaciones
-            if (string.IsNullOrEmpty(name) ||
-                string.IsNullOrEmpty(apellido) ||
-                string.IsNullOrEmpty(est) ||
-                string.IsNullOrEmpty(num) ||
-                string.IsNullOrEmpty(edad))
+            TextBox textBox = (TextBox)sender;
+            if (!EsTextoValido(textBox.Text))
             {
-                MessageBox.Show("Por favor, complete todos los campos antes de guardar.",
-                                "Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!int.TryParse(edad, out int edadNum) || edadNum <= 0)
-            {
-                MessageBox.Show("Ingrese una edad válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (!float.TryParse(est, out float estaturaNum) || estaturaNum <= 0)
-            {
-                MessageBox.Show("Ingrese una estatura válida.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (!long.TryParse(num, out _))
-            {
-                MessageBox.Show("Ingrese un teléfono válido (solo números).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Construcción del string
-            string datos = $"Nombre: {name}\nApellido: {apellido}\nEdad: {edadNum} años\nAltura: {estaturaNum} m\nTeléfono: {num}\nGénero: {genero}";
-
-            string ruta = @"C:\Users\craft\Documents\Códigos\txt\DatosMejorados.txt";
-            try
-            {
-                using (StreamWriter writer = new StreamWriter(ruta, true))
-                {
-                    writer.WriteLine(datos);
-                    writer.WriteLine(new string('-', 40)); // separador
-                }
-
-                MessageBox.Show("Datos guardados exitosamente:\n\n" + datos,
-                                "Registro exitoso",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-
-                LimpiarCampos();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al guardar los datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ingrese valores válidos para el nombre", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnLimpiar_Click(object sender, EventArgs e)
+        private bool EsTextoValido(string texto)
         {
-            LimpiarCampos();
+            return Regex.IsMatch(texto, @"^[a-zA-Z\s]+$");
+        }
+
+        private void validarEdad(object sender, EventArgs e)
+        {
+
+        }
+
+        private void validarEstatura(object sender, EventArgs e)
+        {
+
+        }
+
+        private void validarApellido(object sender, EventArgs e)
+        {
+
+        }
+
+        private void validarTelefono(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
+        {
+            string name = txtNombre.Text;
+            string apellido = txtApellidos.Text;
+            string est = txtEstatura.Text;
+            string num = txtTeléfono.Text;
+            string edad = txtEdad.Text;
+            string genero = "";
+            if (rbMasc.Checked)
+            {
+                genero = "Hombre";
+            }
+            else if (rbFem.Checked)
+            {
+
+                genero = "Mujer";
+            }
+            if (!string.IsNullOrEmpty(txtEdad.Text) || !string.IsNullOrEmpty(txtEstatura.Text) || !string.IsNullOrEmpty(txtNombre.Text) || !string.IsNullOrEmpty(txtTeléfono.Text) || !string.IsNullOrEmpty(txtApellidos.Text))
+            {
+                String datos = $"Nombre:{name}\n\rApellido:{apellido}\n\r Edad:{edad} \n\r Altura: {est} \n\r Telefono: {num} \n\r Sex: {genero}";
+                string ruta = @"C:\Users\craft\Documents\Códigos\txt\Datos3MAgosto2025.txt";
+                bool archivoExt = File.Exists(ruta);
+                using (StreamWriter writer = new StreamWriter(ruta, true))
+                {
+                    if (archivoExt)
+                    {
+                        writer.WriteLine();
+                    }
+                    writer.WriteLine(datos);
+                }
+                MessageBox.Show(datos, "Informacion de registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+
+                // String datos = $"Nombre:{name}\n\rAPellido:{sur}\n\r Edad:{age} \n\r Altura: {altura} \n\r Telefono: {cel} \n\r Sex: {genero}";
+                MessageBox.Show("ingrese valores a los espacios en blanco", "error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
         }
     }
 }
