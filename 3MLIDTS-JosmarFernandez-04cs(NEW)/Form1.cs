@@ -24,7 +24,7 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
             txtTeléfono.TextChanged += validarTelefono;
         }
 
-        private void btnBorrar_Click(object sender, EventArgs e)
+        private void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtEdad.Clear();
             txtEstatura.Clear();
@@ -104,7 +104,7 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
             }
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private void btnConfirmar_Click(object sender, EventArgs e)
         {
             string name = txtNombre.Text;
             string apellido = txtApellidos.Text;
