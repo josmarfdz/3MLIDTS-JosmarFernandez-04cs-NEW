@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
 namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
 {
     public partial class Form1 : Form
