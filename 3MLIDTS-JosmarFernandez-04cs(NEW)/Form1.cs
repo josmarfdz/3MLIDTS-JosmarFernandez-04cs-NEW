@@ -15,6 +15,7 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
 {
     public partial class Form1 : Form
     {
+        string conexionSQL = "Server=localhost;Database=Avanzada;Port=3306;Uid=root,Pwd=1234++;";
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +26,25 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
             txtTeléfono.TextChanged += validarTelefono;
         }
 
+        private void InsertarRegistro(string nombre, string apellido, int edad, decimal estatura, string telefono, string genero)
+        {
+            using (MySqlConnection conection = new MySqlConnection(conexionSQL))
+            {
+                conection.Open();
+                string insertQuery = "INSERT INTO registros (Nombre, Apellidos, Edad, Estatura, Telefono, Genero) VALUES (@Nombre, @Apellidos, @Edad, @Estatura, @Telefono, @Genero)";
+                using(MySqlCommand command = new MySqlCommand(insertQuery, conection))
+                {
+                    command.Parameters.AddWithValue("@Nombre", nombre);
+                    command.Parameters.AddWithValue("@Apellidos", apellido);
+                    command.Parameters.AddWithValue("@Edad", edad);
+                    command.Parameters.AddWithValue("@Estatura", estatura);
+                    command.Parameters.AddWithValue("@Telefono", telefono);
+                    command.Parameters.AddWithValue("@Genero", genero);
+                    command.ExecuteNonQuery();
+                }
+                conection.Close();
+            }
+        }
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtEdad.Clear();
@@ -132,6 +152,8 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
                     if (archivoExt)
                     {
                         writer.WriteLine();
+                        InsertarRegistro(name, apellido, int.Parse(edad), decimal.Parse(est), num, genero);
+                        MessageBox.Show("Datos ingresados correctamente.");
                     }
                     writer.WriteLine(datos);
                 }
