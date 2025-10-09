@@ -32,7 +32,7 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
             {
                 conection.Open();
                 string insertQuery = "INSERT INTO registros (Nombre, Apellidos, Edad, Estatura, Telefono, Genero) VALUES (@Nombre, @Apellidos, @Edad, @Estatura, @Telefono, @Genero)";
-                using(MySqlCommand command = new MySqlCommand(insertQuery, conection))
+                using (MySqlCommand command = new MySqlCommand(insertQuery, conection))
                 {
                     command.Parameters.AddWithValue("@Nombre", nombre);
                     command.Parameters.AddWithValue("@Apellidos", apellido);
@@ -147,24 +147,35 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
                 string datos = $"Nombre:{name}\n\rApellido:{apellido}\n\r Edad:{edad} \n\r Altura: {est} \n\r Telefono: {num} \n\r Sex: {genero}";
                 string ruta = @"C:\Users\craft\Documents\Códigos\txt\Datos3MAgosto2025.txt";
                 bool archivoExt = File.Exists(ruta);
-                using (StreamWriter writer = new StreamWriter(ruta, true))
+                if (archivoExt == false)
                 {
-                    if (archivoExt)
-                    {
-                        writer.WriteLine();
-                        InsertarRegistro(name, apellido, int.Parse(edad), decimal.Parse(est), num, genero);
-                        MessageBox.Show("Datos ingresados correctamente.");
-                    }
-                    writer.WriteLine(datos);
+                    File.WriteAllText(ruta, datos);
+                    InsertarRegistro(name, apellido, int.Parse(edad), decimal.Parse(est), num, genero);
                 }
-                MessageBox.Show(datos, "Informacion de registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                {
+                    // Verificar si el archivo ya existe
+                    using (StreamWriter writer = new StreamWriter(ruta, true))
+                    {
+                        if (archivoExt)
+                        {
+                            // Si el archivo existe, añadir un separador antes del nuevo registro
+                            writer.WriteLine();
+                        }
+
+                        writer.WriteLine(datos);
+                        InsertarRegistro(name, apellido, int.Parse(edad), decimal.Parse(est), num, genero);
+                        MessageBox.Show("Datos insertados en la Base de Datos:\n\n" + datos, "Información BD", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                // Mostrar un mensaje con los datos capturados
+                //MessageBox.Show("Datos guardados con éxito:\n\n" + datos, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-
-                // String datos = $"Nombre:{name}\n\rAPellido:{sur}\n\r Edad:{age} \n\r Altura: {altura} \n\r Telefono: {cel} \n\r Sex: {genero}";
-                MessageBox.Show("ingrese valores a los espacios en blanco", "error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Por favor, ingrese datos válidos en los campos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
     }
 }
