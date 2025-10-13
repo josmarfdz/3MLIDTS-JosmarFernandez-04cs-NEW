@@ -15,7 +15,7 @@ namespace _3MLIDTS_JosmarFernandez_04cs_NEW_
 {
     public partial class Form1 : Form
     {
-        string conexionSQL = "Server=localhost;Database=Avanzada;Port=3306;Uid=root,Pwd=1234++;";
+        string conexionSQL = "Server=localhost;Database=formulario3m;Port=3306;Uid=root,Pwd=1234++;";
         public Form1()
         {
             InitializeComponent();
